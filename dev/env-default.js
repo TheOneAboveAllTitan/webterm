@@ -6,7 +6,7 @@ var config = {
 // interactive help
 // =
 
-const METHOD_HELP = [
+export const METHOD_HELP = [
   {name: 'ls', description: 'List files in the directory'},
   {name: 'cd', description: 'Change the current directory'},
   {name: 'pwd', description: 'Fetch the current directory'},

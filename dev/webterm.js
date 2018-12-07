@@ -4,6 +4,7 @@ import minimist from './vendor/minimist-v1.2.0.js'
 import {importModule} from './vendor/dynamic-import-polyfill.js'
 import {joinPath} from './util.js'
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+import { METHOD_HELP as help }from '/dev/env-default.js'
 
 // globals
 // =
@@ -13,7 +14,7 @@ var env // current working environment
 
 var commandHist = {
   array: new Array(),
-  insert: -1,
+  //insert: -1,
   cursor: -1,
   add (entry) {
     if (entry) {
@@ -27,7 +28,7 @@ var commandHist = {
     return this.array[this.cursor]
   },
   prevDown () {
-    this.cursor = Math.min(this.array.length, this.cursor + 1)
+    this.cursor = Math.min(this.array.length-1, this.cursor + 1)
     return this.array[this.cursor] || ''
   },
   reset () {
@@ -122,6 +123,12 @@ function onKeyDown (e) {
     document.querySelector('.prompt input').value = ''
     commandHist.reset()
   }
+    else if (e.code === 'Tab'){
+      e.preventDefault()
+      document.querySelector('.prompt input').value = autocomplete(document.querySelector('.prompt input').value )
+
+    }
+ // console.log(commandHist)
 }
 
 function onPromptKeyUp (e) {
@@ -246,4 +253,18 @@ const builtins = {
     return cwd
   },
   setCWD
+}
+
+//autocomplete function
+function autocomplete(input){
+ var suggestions = new Array()
+ help.forEach(function(el){
+  if (el.name.startsWith(input))
+    suggestions.push(el.name)
+ })
+ if(suggestions.length===1)
+  return suggestions[0]
+ else 
+  return env.html `print every possible command here`
+  
 }
